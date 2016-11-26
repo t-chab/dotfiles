@@ -2,6 +2,14 @@
 ;; Begin file
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Always load newest byte code
+(setq load-prefer-newer t)
+
+
+;; reduce the frequency of garbage collection by making it happen on
+;; each 50MB of allocated data (the default is on every 0.76MB)
+(setq gc-cons-threshold 50000000)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Package management
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -44,7 +52,13 @@
 
 ;; Code completion
 (use-package company
-  :config (add-hook 'after-init-hook 'global-company-mode))
+  :config (add-hook 'after-init-hook 'global-company-mode)
+  (setq company-idle-delay 0.5)
+  (setq company-tooltip-limit 10)
+  (setq company-minimum-prefix-length 2)
+  ;; invert the navigation direction if the the completion popup-isearch-match
+  ;; is displayed on top (happens near the bottom of windows)
+  (setq company-tooltip-flip-when-above t))
 
 ;; Additional completion packages
 (use-package company-ansible)
@@ -62,7 +76,8 @@
   :config (helm-mode 1)
   :bind (("M-x" . helm-M-x)
          ("M-y" . helm-show-kill-ring)
-         ("M-<f5>" . helm-find-files)))
+         ("M-<f5>" . helm-find-files)
+         ("C-c w" . helm-wikipedia-suggest)))
 
 ;; Use custom theme
 (use-package monokai-theme
@@ -104,8 +119,11 @@
 ;; Custom settings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; Maximize frame
+;; Maximize frame at startup
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+;; warn when opening files bigger than 100MB
+(setq large-file-warning-threshold 100000000)
 
 ;; Smart buffer names
 (require 'uniquify)
@@ -193,9 +211,8 @@
       (set-face-attribute 'default nil :font "Consolas-9")
       (add-to-list 'package-archives
                    '("melpa-stable" . "http://stable.melpa.org/packages/") t)
-      (require 'ssh-agency)
-      )
-  )
+      (require 'ssh-agency)))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
