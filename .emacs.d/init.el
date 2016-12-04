@@ -1,10 +1,29 @@
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" default)))
+ '(package-selected-packages
+   (quote
+    (xterm-color apache-mode json-mode markdown-toc markdown-preview-mode markdown-mode+ autodisass-java-bytecode discover-my-major multi-term monokai-theme helm company-web company-try-hard company-shell company-restclient company-quickhelp company-lua company-emoji company-dict company-ansible company smart-mode-line-powerline-theme auto-package-update use-package)))
+ '(term-default-bg-color "#000000")
+ '(term-default-fg-color "#00ff00"))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Begin file
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Always load newest byte code
 (setq load-prefer-newer t)
-
 
 ;; reduce the frequency of garbage collection by making it happen on
 ;; each 50MB of allocated data (the default is on every 0.76MB)
@@ -18,7 +37,7 @@
 
 ;; Add MELPA repository
 (add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/") t)
+             '("melpa" . "http://melpa.org/packages/") t)
 
 ;; Add Marmalade repository
 ;;(add-to-list 'package-archives
@@ -85,7 +104,12 @@
 
 ;; Multi terminal emulation
 (use-package multi-term
-  :config (require 'multi-term))
+  :config (setq term-default-bg-color "#000000")
+  (setq term-default-fg-color "#00ff00")
+  (setq multi-term-program "/bin/fish")
+  (add-hook 'term-mode-hook 'toggle-truncate-lines)
+  :bind ("<f5>" . multi-term))
+
 ;; Displays key binding for current mode
 (use-package discover-my-major
   :bind (("C-h C-m" . discover-my-major)
@@ -142,6 +166,9 @@
 ;; Check TLS certs
 (setq tls-checktrust t)
 (setq gnutls-verify-error t)
+
+;; Nice Multi-term
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Nice keyboard shortcuts
@@ -205,28 +232,17 @@
       backup-directory-alist `(("." . ,(concat user-emacs-directory
                                                "backups"))))
 
+;; Tramp
+(setq shell-file-name "bash")
+(setq explicit-shell-file-name shell-file-name)
+
 ;; Windows specific setup
 (if (eq system-type 'windows-nt)
     (progn
       (set-face-attribute 'default nil :font "Consolas-9")
-      (add-to-list 'package-archives
-                   '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+      ;; add cygwin binaries to path
+      (if (file-directory-p "c:/tools/cygwin/bin")
+          (add-to-list 'exec-path "c:/tools/cygwin/bin"))
+      (cond  ((eq window-system 'w32)
+          (setq tramp-default-method "sshx")))
       (require 'ssh-agency)))
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" default)))
- '(package-selected-packages
-   (quote
-    (json-mode markdown-toc markdown-preview-mode markdown-mode+ autodisass-java-bytecode discover-my-major multi-term monokai-theme helm company-web company-try-hard company-shell company-restclient company-quickhelp company-lua company-emoji company-dict company-ansible company smart-mode-line-powerline-theme auto-package-update use-package))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
