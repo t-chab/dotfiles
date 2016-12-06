@@ -1,5 +1,7 @@
 # Useful fisherman plugins list
 
+[fisherman](http://fisherman.sh) is an awesome plugin manager for [fish](http://fish.sh) shell. Here's some useful plugins :
+
 - omf/theme-l
 - omf/android-sdk
 - anicode
@@ -16,5 +18,4 @@
 - omf/ssh
 - termcolours
 - omf/tmux
-- vte
 - omf/xdg
