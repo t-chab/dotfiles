@@ -31,6 +31,8 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
+     javascript
+     windows-scripts
      ;; ----------------------------------------------------------------
      ;; Example of useful layers you may want to use right away.
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
@@ -43,9 +45,14 @@ values."
      git
      markdown
      org
+     ;; Set multi-term as default terminal emulator, and using fish as default shell
      (shell :variables
              shell-default-height 30
-             shell-default-position 'bottom)
+             shell-default-position 'bottom
+             shell-default-shell 'multi-term
+             shell-default-term-shell "/bin/fish"
+             multi-term-program "/bin/fish"
+     )
      spell-checking
      syntax-checking
      version-control
@@ -57,21 +64,10 @@ values."
      mu4e
      emoji
      csv
-     html
-     java
-     javascript
-     latex
-     lua
      shell-scripts
-     sql
-     windows-scripts
      github
      gtags
      colors
-     ansible
-     chrome
-     dash
-     docker
      imenu-list
      pandoc
      pdf-tools
@@ -82,14 +78,12 @@ values."
      vagrant
      elfeed
      search-engine
-     spotify
-     twitter
      )
-   ;; List of additional packages that will be installed without being
+   ;; List of additional packages that will be installhttp://www.haproxy.org/download/1.5/doc/configuration.txted without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '(autodisass-java-bytecode)
+   dotspacemacs-additional-packages '(autodisass-java-bytecode keychain-environment)
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
@@ -118,7 +112,7 @@ values."
    ;; This variable has no effect if Emacs is launched with the parameter
    ;; `--insecure' which forces the value of this variable to nil.
    ;; (default t)
-   dotspacemacs-elpa-https t
+   dotspacemacs-elpa-https nil
    ;; Maximum allowed time in seconds to contact an ELPA repository.
    dotspacemacs-elpa-timeout 5
    ;; If non nil then spacemacs will check for updates at startup
@@ -336,14 +330,29 @@ before packages are loaded. If you are unsure, you should try in setting them in
   "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after
 layers configuration.
-This is the place where most of your configurations should be done. Unless it is
+This is the place where most of your configurations shoulfedd be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
   ;; kill current buffer by default
   (global-set-key (kbd "C-x k") 'kill-this-buffer)
+  ;; Map Helm to M-x
   (global-set-key (kbd "M-x") 'helm-M-x)
-  )
+  ;; Truncate lines, needed for some prompt
+  (add-hook 'term-mode-hook 'toggle-truncate-lines)
+
+  ;; Jabber
+  (setq-default jabber-account-list '(("user@gtalk.google.com"))
+  jabber-mode-line-compact nil
+  jabber-history-enabled t
+  jabber-history-muc-enabled t
+  jabber-socks5-proxies "gtalk.google.com:5222"
+  jabber-chat-buffer-show-avatar nil
+  jabber-roster-line-format "%c %-25n %u %-8s  %S"
+  jabber-show-offline-contacts nil)
+
+  (jabber-connect-all)
+)
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
@@ -352,9 +361,10 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(company-emoji-insert-unicode t)
  '(package-selected-packages
    (quote
-    (web-beautify mmm-mode markdown-toc livid-mode skewer-mode js2-refactor multiple-cursors js2-mode js-doc gh-md coffee-mode autodisass-java-bytecode zeal-at-point web-mode vagrant-tramp vagrant typo twittering-mode tagedit systemd sql-indent spotify slim-mode scss-mode sass-mode ranger rainbow-mode rainbow-identifiers pug-mode pdf-tools pandoc-mode ox-pandoc mu4e-maildirs-extension mu4e-alert magit-gh-pulls less-css-mode jabber fsm imenu-list ibuffer-projectile helm-spotify multi helm-gtags helm-dash helm-css-scss haml-mode gmail-message-mode ham-mode markdown-mode html-to-markdown github-search github-clone github-browse-file gist gh marshal logito pcache ht ggtags engine-mode emoji-cheat-sheet-plus emmet-mode elfeed-web simple-httpd elfeed-org elfeed-goodies ace-jump-mode noflet elfeed edit-server dockerfile-mode docker json-mode tablist docker-tramp json-snatcher json-reformat company-web web-completion-data company-tern dash-functional tern company-shell company-emoji company-emacs-eclim eclim company-auctex color-identifiers-mode auctex xterm-color smeargle shell-pop orgit org-projectile org-present org org-pomodoro alert log4e gntp org-download mwim multi-term magit-gitflow htmlize helm-gitignore helm-company helm-c-yasnippet gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit magit-popup git-commit with-editor eshell-z eshell-prompt-extras esh-help diff-hl company-statistics company auto-yasnippet yasnippet auto-dictionary ac-ispell auto-complete evil-visual-mark-mode ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spacemacs-theme spaceline restart-emacs request rainbow-delimiters quelpa popwin persp-mode pcre2el paradox org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide ido-vertical-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu elisp-slime-nav dumb-jump define-word column-enforce-mode clean-aindent-mode auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line))))
+    (powershell smartparens bind-map helm helm-core hydra apache-mode keychain-environment insert-shebang fish-mode packed web-beautify mmm-mode markdown-toc livid-mode skewer-mode js2-refactor multiple-cursors js2-mode js-doc gh-md coffee-mode autodisass-java-bytecode zeal-at-point web-mode vagrant-tramp vagrant typo twittering-mode tagedit systemd sql-indent spotify slim-mode scss-mode sass-mode ranger rainbow-mode rainbow-identifiers pug-mode pdf-tools pandoc-mode ox-pandoc mu4e-maildirs-extension mu4e-alert magit-gh-pulls less-css-mode jabber fsm imenu-list ibuffer-projectile helm-spotify multi helm-gtags helm-dash helm-css-scss haml-mode gmail-message-mode ham-mode markdown-mode html-to-markdown github-search github-clone github-browse-file gist gh marshal logito pcache ht ggtags engine-mode emoji-cheat-sheet-plus emmet-mode elfeed-web simple-httpd elfeed-org elfeed-goodies ace-jump-mode noflet elfeed edit-server dockerfile-mode docker json-mode tablist docker-tramp json-snatcher json-reformat company-web web-completion-data company-tern dash-functional tern company-shell company-emoji company-emacs-eclim eclim company-auctex color-identifiers-mode auctex xterm-color smeargle shell-pop orgit org-projectile org-present org org-pomodoro alert log4e gntp org-download mwim multi-term magit-gitflow htmlize helm-gitignore helm-company helm-c-yasnippet gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter flyspell-correct-helm flyspell-correct flycheck-pos-tip pos-tip flycheck evil-magit magit magit-popup git-commit with-editor eshell-z eshell-prompt-extras esh-help diff-hl company-statistics company auto-yasnippet yasnippet auto-dictionary ac-ispell auto-complete evil-visual-mark-mode ws-butler window-numbering which-key volatile-highlights vi-tilde-fringe uuidgen use-package toc-org spacemacs-theme spaceline restart-emacs request rainbow-delimiters quelpa popwin persp-mode pcre2el paradox org-plus-contrib org-bullets open-junk-file neotree move-text macrostep lorem-ipsum linum-relative link-hint info+ indent-guide ido-vertical-mode hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-flx helm-descbinds helm-ag google-translate golden-ratio flx-ido fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu elisp-slime-nav dumb-jump define-word column-enforce-mode clean-aindent-mode auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
