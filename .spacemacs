@@ -50,8 +50,8 @@ values."
              shell-default-height 30
              shell-default-position 'bottom
              shell-default-shell 'multi-term
-             shell-default-term-shell "/bin/fish"
-             multi-term-program "/bin/fish"
+             shell-default-term-shell "fish"
+             multi-term-program "fish"
      )
      spell-checking
      syntax-checking
@@ -79,7 +79,7 @@ values."
      elfeed
      search-engine
      )
-   ;; List of additional packages that will be installhttp://www.haproxy.org/download/1.5/doc/configuration.txted without being
+   ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
