@@ -44,8 +44,20 @@ values."
      emacs-lisp
      git
      markdown
+<<<<<<< HEAD
      (org :variables org-enable-github-support t
           org-enable-bootstrap-support t)
+=======
+     org
+     ;; Set multi-term as default terminal emulator, and using fish as default shell
+     (shell :variables
+             shell-default-height 30
+             shell-default-position 'bottom
+             shell-default-shell 'multi-term
+             shell-default-term-shell "fish"
+             multi-term-program "fish"
+     )
+>>>>>>> d75208b07b71aab462cc586c301a80789a2d9ec1
      spell-checking
      syntax-checking
      version-control
@@ -77,7 +89,11 @@ values."
      vagrant
      elfeed
      search-engine
+<<<<<<< HEAD
    )
+=======
+     )
+>>>>>>> d75208b07b71aab462cc586c301a80789a2d9ec1
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the

@@ -11,7 +11,7 @@
 - done
 - omf/emacs
 - omf/extract
-- omf/getopts
+- omf/export
 - paths
 - omf/pbcopy
 - omf/proxy
