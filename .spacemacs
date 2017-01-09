@@ -44,11 +44,7 @@ values."
      emacs-lisp
      git
      markdown
-<<<<<<< HEAD
-     (org :variables org-enable-github-support t
-          org-enable-bootstrap-support t)
-=======
-     org
+     ;; (org :variables org-enable-github-support t org-enable-bootstrap-support t)
      ;; Set multi-term as default terminal emulator, and using fish as default shell
      (shell :variables
              shell-default-height 30
@@ -57,15 +53,14 @@ values."
              shell-default-term-shell "fish"
              multi-term-program "fish"
      )
->>>>>>> d75208b07b71aab462cc586c301a80789a2d9ec1
      spell-checking
      syntax-checking
      version-control
      ;; my layers
-     jabber
+     ;; jabber
+     gnus
      ibuffer
      typography
-     mu4e
      emoji
      csv
      shell-scripts
@@ -77,23 +72,12 @@ values."
      pdf-tools
      ranger
      restclient
-     ;; Set multi-term as default terminal emulator, and using fish as default shell
-     (shell :variables
-            shell-default-height 30
-            shell-default-position 'bottom
-            shell-default-shell 'multi-term
-            shell-default-term-shell "/usr/bin/fish"
-            multi-term-program "/usr/bin/fish"
-     )
      systemd
      vagrant
      elfeed
      search-engine
-<<<<<<< HEAD
    )
-=======
      )
->>>>>>> d75208b07b71aab462cc586c301a80789a2d9ec1
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
@@ -360,19 +344,17 @@ you should place your code here."
   ;; Truncate lines, needed for some prompt
   (add-hook 'term-mode-hook 'toggle-truncate-lines)
 
-  (with-eval-after-load 'org
-
-  )
+  ;; (with-eval-after-load 'org)
 
   ;; Jabber
-  (setq-default jabber-account-list '(("tchab@jabber.at"))
-  jabber-mode-line-compact nil
-  jabber-history-enabled t
-  jabber-history-muc-enabled t
-  jabber-socks5-proxies "proxy.jabber.at"
-  jabber-chat-buffer-show-avatar nil
-  jabber-roster-line-format "%c %-25n %u %-8s  %S"
-  jabber-show-offline-contacts nil)
+  ;; (setq-default jabber-account-list '(("account@jabber.at"))
+  ;; jabber-mode-line-compact nil
+  ;; jabber-history-enabled t
+  ;; jabber-history-muc-enabled t
+  ;; jabber-socks5-proxies "proxy.jabber.at"
+  ;; jabber-chat-buffer-show-avatar nil
+  ;; jabber-roster-line-format "%c %-25n %u %-8s  %S"
+  ;; jabber-show-offline-contacts nil)
 
-  (jabber-connect-all)
+  ;; (jabber-connect-all)
 )
