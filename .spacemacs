@@ -77,7 +77,6 @@ values."
      elfeed
      search-engine
    )
-     )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
@@ -94,7 +93,8 @@ values."
    ;; `used-but-keep-unused' installs only the used packages but won't uninstall
    ;; them if they become unused. `all' installs *all* packages supported by
    ;; Spacemacs and never uninstall them. (default is `used-only')
-   dotspacemacs-install-packages 'used-only))
+   dotspacemacs-install-packages 'used-only)
+)
 
 (defun dotspacemacs/init ()
   "Initialization function.
@@ -138,7 +138,7 @@ values."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'random
+   dotspacemacs-startup-banner '1
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
    ;; Possible values for list-type are:
@@ -325,8 +325,8 @@ before packages are loaded. If you are unsure, you should try in setting them in
    dotspacemacs-themes '(monokai))
 
   ;; Update path to add nodejs global executables
-  (setenv "PATH" (concat (getenv "PATH") ":~/.npm-global/bin"))
-  (setq exec-path (append exec-path '("~/.npm-global/bin")))
+  (setenv "PATH" (concat (getenv "PATH") ":~/.npm/bin"))
+  (setq exec-path (append exec-path '("~/.npm/bin")))
 )
 
 (defun dotspacemacs/user-config ()
@@ -357,4 +357,17 @@ you should place your code here."
   ;; jabber-show-offline-contacts nil)
 
   ;; (jabber-connect-all)
+)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages)
+)
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
 )
