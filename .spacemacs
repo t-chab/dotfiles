@@ -72,17 +72,9 @@ values."
      pdf-tools
      ranger
      restclient
-     ;; Set multi-term as default terminal emulator, and using fish as default shell
-     (shell :variables
-            shell-default-height 30
-            shell-default-position 'bottom
-            shell-default-shell 'multi-term
-            shell-default-term-shell "/usr/bin/fish"
-            multi-term-program "/usr/bin/fish"
-     )
      systemd
      vagrant
-     elfeed
+     docker
      search-engine
    )
    ;; List of additional packages that will be installed without being
@@ -370,11 +362,12 @@ you should place your code here."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages)
-)
+ '(package-selected-packages
+   (quote
+    (dockerfile-mode docker docker-tramp xterm-color ws-butler systemd spacemacs-theme spaceline neotree move-text info+ hide-comnt help-fns+ helm-flx git-messenger exec-path-from-shell evil-mc eshell-z company-emoji column-enforce-mode elfeed smartparens highlight flycheck company helm helm-core projectile pcache magit magit-popup git-commit with-editor hydra js2-mode window-numbering which-key web-beautify volatile-highlights vi-tilde-fringe vagrant-tramp vagrant uuidgen use-package typo toc-org smeargle shell-pop restart-emacs ranger rainbow-mode rainbow-identifiers rainbow-delimiters quelpa pkg-info persp-mode pdf-tools pcre2el paradox pandoc-mode ox-pandoc orgit org-plus-contrib org-bullets open-junk-file mwim multi-term monokai-theme mmm-mode markdown-toc magit-gitflow magit-gh-pulls macrostep lorem-ipsum livid-mode linum-relative link-hint keychain-environment json-mode js2-refactor js-doc insert-shebang indent-guide imenu-list ido-vertical-mode ibuffer-projectile hungry-delete hl-todo highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gtags helm-gitignore helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio github-search github-clone github-browse-file gitconfig-mode gitattributes-mode git-timemachine git-link git-gutter-fringe git-gutter-fringe+ gist gh-md ggtags flyspell-correct-helm flycheck-pos-tip flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu eshell-prompt-extras esh-help engine-mode emoji-cheat-sheet-plus elisp-slime-nav elfeed-web elfeed-org elfeed-goodies dumb-jump diff-hl define-word company-tern company-statistics company-shell color-identifiers-mode coffee-mode clean-aindent-mode autodisass-java-bytecode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile async aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
-)
+ )
