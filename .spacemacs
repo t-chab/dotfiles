@@ -44,11 +44,8 @@ values."
      emacs-lisp
      git
      markdown
-<<<<<<< HEAD
      (org :variables org-enable-github-support t
           org-enable-bootstrap-support t)
-=======
-     org
      ;; Set multi-term as default terminal emulator, and using fish as default shell
      (shell :variables
              shell-default-height 30
@@ -57,7 +54,6 @@ values."
              shell-default-term-shell "fish"
              multi-term-program "fish"
      )
->>>>>>> d75208b07b71aab462cc586c301a80789a2d9ec1
      spell-checking
      syntax-checking
      version-control
@@ -77,23 +73,11 @@ values."
      pdf-tools
      ranger
      restclient
-     ;; Set multi-term as default terminal emulator, and using fish as default shell
-     (shell :variables
-            shell-default-height 30
-            shell-default-position 'bottom
-            shell-default-shell 'multi-term
-            shell-default-term-shell "/usr/bin/fish"
-            multi-term-program "/usr/bin/fish"
-     )
      systemd
      vagrant
      elfeed
      search-engine
-<<<<<<< HEAD
    )
-=======
-     )
->>>>>>> d75208b07b71aab462cc586c301a80789a2d9ec1
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
@@ -376,3 +360,17 @@ you should place your code here."
 
   (jabber-connect-all)
 )
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (monokai-theme xterm-color ws-butler window-numbering which-key web-beautify volatile-highlights vi-tilde-fringe vagrant-tramp vagrant uuidgen use-package typo toc-org systemd spacemacs-theme spaceline smeargle shell-pop restart-emacs ranger rainbow-mode rainbow-identifiers rainbow-delimiters quelpa persp-mode pdf-tools pcre2el paradox pandoc-mode ox-twbs ox-pandoc ox-gfm orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file neotree mwim multi-term mu4e-maildirs-extension mu4e-alert move-text mmm-mode markdown-toc magit-gitflow magit-gh-pulls macrostep lorem-ipsum livid-mode linum-relative link-hint keychain-environment json-mode js2-refactor js-doc jabber insert-shebang info+ indent-guide imenu-list ido-vertical-mode ibuffer-projectile hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gtags helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot github-search github-clone github-browse-file gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gist gh-md ggtags flyspell-correct-helm flycheck-pos-tip flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help engine-mode emoji-cheat-sheet-plus elisp-slime-nav elfeed-web elfeed-org elfeed-goodies dumb-jump diff-hl define-word company-tern company-statistics company-shell company-emoji column-enforce-mode color-identifiers-mode coffee-mode clean-aindent-mode autodisass-java-bytecode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
