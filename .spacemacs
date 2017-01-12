@@ -44,8 +44,7 @@ values."
      emacs-lisp
      git
      markdown
-     (org :variables org-enable-github-support t
-          org-enable-bootstrap-support t)
+     ;; (org :variables org-enable-github-support t org-enable-bootstrap-support t)
      ;; Set multi-term as default terminal emulator, and using fish as default shell
      (shell :variables
              shell-default-height 30
@@ -58,10 +57,10 @@ values."
      syntax-checking
      version-control
      ;; my layers
-     jabber
+     ;; jabber
+     gnus
      ibuffer
      typography
-     mu4e
      emoji
      csv
      shell-scripts
@@ -73,6 +72,14 @@ values."
      pdf-tools
      ranger
      restclient
+     ;; Set multi-term as default terminal emulator, and using fish as default shell
+     (shell :variables
+            shell-default-height 30
+            shell-default-position 'bottom
+            shell-default-shell 'multi-term
+            shell-default-term-shell "/usr/bin/fish"
+            multi-term-program "/usr/bin/fish"
+     )
      systemd
      vagrant
      elfeed
@@ -138,7 +145,7 @@ values."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'random
+   dotspacemacs-startup-banner '1
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
    ;; Possible values for list-type are:
@@ -325,8 +332,8 @@ before packages are loaded. If you are unsure, you should try in setting them in
    dotspacemacs-themes '(monokai))
 
   ;; Update path to add nodejs global executables
-  (setenv "PATH" (concat (getenv "PATH") ":~/.npm-global/bin"))
-  (setq exec-path (append exec-path '("~/.npm-global/bin")))
+  (setenv "PATH" (concat (getenv "PATH") ":~/.npm/bin"))
+  (setq exec-path (append exec-path '("~/.npm/bin")))
 )
 
 (defun dotspacemacs/user-config ()
@@ -344,33 +351,30 @@ you should place your code here."
   ;; Truncate lines, needed for some prompt
   (add-hook 'term-mode-hook 'toggle-truncate-lines)
 
-  (with-eval-after-load 'org
-
-  )
+  ;; (with-eval-after-load 'org)
 
   ;; Jabber
-  (setq-default jabber-account-list '(("tchab@jabber.at"))
-  jabber-mode-line-compact nil
-  jabber-history-enabled t
-  jabber-history-muc-enabled t
-  jabber-socks5-proxies "proxy.jabber.at"
-  jabber-chat-buffer-show-avatar nil
-  jabber-roster-line-format "%c %-25n %u %-8s  %S"
-  jabber-show-offline-contacts nil)
+  ;; (setq-default jabber-account-list '(("account@jabber.at"))
+  ;; jabber-mode-line-compact nil
+  ;; jabber-history-enabled t
+  ;; jabber-history-muc-enabled t
+  ;; jabber-socks5-proxies "proxy.jabber.at"
+  ;; jabber-chat-buffer-show-avatar nil
+  ;; jabber-roster-line-format "%c %-25n %u %-8s  %S"
+  ;; jabber-show-offline-contacts nil)
 
-  (jabber-connect-all)
+  ;; (jabber-connect-all)
 )
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (monokai-theme xterm-color ws-butler window-numbering which-key web-beautify volatile-highlights vi-tilde-fringe vagrant-tramp vagrant uuidgen use-package typo toc-org systemd spacemacs-theme spaceline smeargle shell-pop restart-emacs ranger rainbow-mode rainbow-identifiers rainbow-delimiters quelpa persp-mode pdf-tools pcre2el paradox pandoc-mode ox-twbs ox-pandoc ox-gfm orgit org-projectile org-present org-pomodoro org-plus-contrib org-download org-bullets open-junk-file neotree mwim multi-term mu4e-maildirs-extension mu4e-alert move-text mmm-mode markdown-toc magit-gitflow magit-gh-pulls macrostep lorem-ipsum livid-mode linum-relative link-hint keychain-environment json-mode js2-refactor js-doc jabber insert-shebang info+ indent-guide imenu-list ido-vertical-mode ibuffer-projectile hungry-delete htmlize hl-todo highlight-parentheses highlight-numbers highlight-indentation hide-comnt help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gtags helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot github-search github-clone github-browse-file gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gist gh-md ggtags flyspell-correct-helm flycheck-pos-tip flx-ido fish-mode fill-column-indicator fancy-battery eyebrowse expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-args evil-anzu eval-sexp-fu eshell-z eshell-prompt-extras esh-help engine-mode emoji-cheat-sheet-plus elisp-slime-nav elfeed-web elfeed-org elfeed-goodies dumb-jump diff-hl define-word company-tern company-statistics company-shell company-emoji column-enforce-mode color-identifiers-mode coffee-mode clean-aindent-mode autodisass-java-bytecode auto-yasnippet auto-highlight-symbol auto-dictionary auto-compile aggressive-indent adaptive-wrap ace-window ace-link ace-jump-helm-line ac-ispell))))
+ '(package-selected-packages)
+)
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+)
