@@ -1,0 +1,9 @@
+.cache/
+.last-package-update-day
+auto-save-list/
+elpa/
+.saves/
+places
+*recentf*
+%backup*
+

@@ -1,23 +1,3 @@
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" default)))
- '(package-selected-packages
-   (quote
-    (xterm-color apache-mode json-mode markdown-toc markdown-preview-mode markdown-mode+ autodisass-java-bytecode discover-my-major multi-term monokai-theme helm company-web company-try-hard company-shell company-restclient company-quickhelp company-lua company-emoji company-dict company-ansible company smart-mode-line-powerline-theme auto-package-update use-package)))
- '(term-default-bg-color "#000000")
- '(term-default-fg-color "#00ff00"))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Begin file
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -37,7 +17,7 @@
 
 ;; Add MELPA repository
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
+             '("melpa" . "https://melpa.org/packages/") t)
 
 ;; Add Marmalade repository
 ;;(add-to-list 'package-archives
@@ -54,6 +34,10 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+;; Enable use-package
+(eval-when-compile
+(require 'use-package))
+
 ;; Check and install missing packages if needed
 (setq use-package-always-ensure t)
 
@@ -63,11 +47,38 @@
   (auto-package-update-maybe)
   (setq auto-package-update-delete-old-versions t))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; BEGIN - Theme / Look'n'feel settings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; Nice mode line, with nice theme
 (use-package smart-mode-line-powerline-theme
-  :config (setq sml/theme 'powerline))
+  :config (setq sml/theme 'powerline)
+          (setq sml/no-confirm-load-theme t))
 (use-package smart-mode-line
   :config (sml/setup))
+
+;; Use custom theme
+(use-package zenburn-theme
+  :config (load-theme 'zenburn t))
+
+;; No toolbar / menubar
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; END - Theme / Look'n'feel settings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; BEGIN - Completion
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Everywhere completion
+(use-package ivy
+  :config (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t)
+  ivy-count-format "%d/%d ")
 
 ;; Code completion
 (use-package company
@@ -90,25 +101,9 @@
 (use-package company-try-hard)
 (use-package company-web)
 
-;; Helm for minibuffer completion
-(use-package helm
-  :config (helm-mode 1)
-  :bind (("M-x" . helm-M-x)
-         ("M-y" . helm-show-kill-ring)
-         ("M-<f5>" . helm-find-files)
-         ("C-c w" . helm-wikipedia-suggest)))
-
-;; Use custom theme
-(use-package monokai-theme
-  :config (load-theme 'monokai t))
-
-;; Multi terminal emulation
-(use-package multi-term
-  :config (setq term-default-bg-color "#000000")
-  (setq term-default-fg-color "#00ff00")
-  (setq multi-term-program "/bin/fish")
-  (add-hook 'term-mode-hook 'toggle-truncate-lines)
-  :bind ("<f5>" . multi-term))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; END - Completion
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Displays key binding for current mode
 (use-package discover-my-major
@@ -118,8 +113,7 @@
 ;; Org mode
 (use-package org
   :bind (("\C-cl" . org-store-link)
-         ("\C-cl" . org-agenda)
-         ("M-<f5>" . helm-find-files))
+         ("\C-cl" . org-agenda))
   :config (setq org-log-done t))
 
 ;; Nice package to automatically disassemble java .class files
@@ -130,13 +124,10 @@
 (use-package markdown-preview-mode)
 (use-package markdown-toc)
 (use-package json-mode)
-
-;; flyspell-popup flyspell-correct-helm
-;; flymake-shell flymake-sass flymake-json flymake-jslint flymake-gjshint flymake-css
-;; flycheck-pos-tip flycheck-package flycheck-color-mode-line flycheck-checkbashisms flycheck
+(use-package nix-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; End package managements
+;; END - Custom packages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -158,17 +149,11 @@
 
 ;; Change default font
 (set-face-attribute 'default nil :font "Source Code Pro-9")
-
-;; Disable toolbar
-(if window-system
-    (tool-bar-mode -1))
+;;(set-default-font "-*-Hack-normal-normal-normal-*-12-*-*-*-m-0-iso10646-1")
 
 ;; Check TLS certs
 (setq tls-checktrust t)
 (setq gnutls-verify-error t)
-
-;; Nice Multi-term
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Nice keyboard shortcuts
@@ -212,8 +197,9 @@
 ;; Indent with 4 spaces
 (setq-default tab-width 4)
 
-;; SSH by default for remote host access
-(setq tramp-default-method "ssh")
+;; Backups goes to one directory
+(setq backup-directory-alist `(("." . "~/.emacs.d/.saves")))
+(setq backup-by-copying t)
 
 ;; Fix clipboard integration
 (setq x-select-enable-clipboard t
@@ -228,21 +214,34 @@
       visible-bell t
       load-prefer-newer t
       ediff-window-setup-function 'ediff-setup-windows-plain
-      save-place-file (concat user-emacs-directory "places")
-      backup-directory-alist '(("." . ,(concat user-emacs-directory
-                                               "backups"))))
+      save-place-file (concat user-emacs-directory "places"))
 
 ;; Tramp
+
+;; SSH by default for remote host access
+(setq tramp-default-method "ssh")
+
 (setq shell-file-name "bash")
 (setq explicit-shell-file-name shell-file-name)
 
-;; Windows specific setup
-(if (eq system-type 'windows-nt)
-    (progn
-      (set-face-attribute 'default nil :font "Consolas-9")
-      ;; add cygwin binaries to path
-      (if (file-directory-p "c:/tools/cygwin/bin")
-          (add-to-list 'exec-path "c:/tools/cygwin/bin"))
-      (cond  ((eq window-system 'w32)
-          (setq tramp-default-method "sshx")))
-      (require 'ssh-agency)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; END - Custom settings
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" default)))
+ '(package-selected-packages
+   (quote
+    (json-mode markdown-toc markdown-preview-mode markdown-mode+ autodisass-java-bytecode discover-my-major multi-term zenburn-theme company-web company-try-hard company-shell company-restclient company-quickhelp company-lua company-emoji company-dict company-ansible company ivy smart-mode-line-powerline-theme auto-package-update use-package))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
