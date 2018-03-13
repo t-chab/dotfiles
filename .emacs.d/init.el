@@ -79,6 +79,7 @@
   :config (ivy-mode 1)
   (setq ivy-use-virtual-buffers t)
   (setq ivy-count-format "%d/%d ")
+  (setq ivy-extra-directories nil)
   (global-set-key (kbd "C-s") 'swiper)
   (global-set-key (kbd "M-x") 'counsel-M-x)
   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
@@ -182,7 +183,11 @@
 (save-place-mode 1)
 
 ;; Change default font
-(set-face-attribute 'default nil :font "Source Code Pro-9")
+(set-face-attribute 'default nil
+                    :family "Source Code Pro"
+                    :height 90
+                    :weight 'normal
+                    :width 'normal)
 ;;(set-default-font "-*-Hack-normal-normal-normal-*-12-*-*-*-m-0-iso10646-1")
 
 ;; Check TLS certs
@@ -198,13 +203,6 @@
 
 ;; Complete shortcut
 (global-set-key (kbd "M-/") 'hippie-expand)
-
-;; Nice buffer search
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-
-;; Regexp searches by default
-(global-set-key (kbd "C-s") 'isearch-forward-regexp)
-(global-set-key (kbd "C-r") 'isearch-backward-regexp)
 
 ;; Always display column number in status line
 (setq column-number-mode t)
@@ -234,6 +232,9 @@
 ;; Backups goes to one directory
 (setq backup-directory-alist `(("." . "~/.emacs.d/.saves")))
 (setq backup-by-copying t)
+
+;; Fix path for NixOS
+(setq exec-path (append exec-path '("/run/current-system/sw/bin")))
 
 ;; Fix clipboard integration
 (setq x-select-enable-clipboard t
@@ -272,7 +273,8 @@
     ("84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" default)))
  '(package-selected-packages
    (quote
-    (json-mode markdown-toc markdown-preview-mode markdown-mode+ autodisass-java-bytecode discover-my-major multi-term zenburn-theme company-web company-try-hard company-shell company-restclient company-quickhelp company-lua company-emoji company-dict company-ansible company ivy smart-mode-line-powerline-theme auto-package-update use-package))))
+    (json-mode markdown-toc markdown-preview-mode markdown-mode+ autodisass-java-bytecode discover-my-major multi-term zenburn-theme company-web company-try-hard company-shell company-restclient company-quickhelp company-lua company-emoji company-dict company-ansible company ivy smart-mode-line-powerline-theme auto-package-update use-package)))
+ '(tramp-default-method "ssh"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
