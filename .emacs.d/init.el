@@ -161,6 +161,8 @@
 (use-package docker-compose-mode)
 (use-package yaml-mode)
 
+(use-package pdf-tools)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; END - Custom packages
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -249,7 +251,9 @@
       visible-bell t
       load-prefer-newer t
       ediff-window-setup-function 'ediff-setup-windows-plain
-      save-place-file (concat user-emacs-directory "places"))
+      save-place-file (concat user-emacs-directory "places")
+      backup-directory-alist `(("." . ,(concat user-emacs-directory
+                                               "backups"))))
 
 ;; Tramp
 
