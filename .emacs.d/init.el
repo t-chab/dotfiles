@@ -80,6 +80,9 @@
   (setq ivy-use-virtual-buffers t)
   (setq ivy-count-format "%d/%d ")
   (setq ivy-extra-directories nil)
+  (setq ivy-use-selectable-prompt t)
+  (setq ivy-re-builders-alist
+      '((t . ivy--regex-fuzzy)))
   (global-set-key (kbd "C-s") 'swiper)
   (global-set-key (kbd "M-x") 'counsel-M-x)
   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
@@ -93,6 +96,7 @@
   (global-set-key (kbd "C-c k") 'counsel-ag)
   (global-set-key (kbd "C-x l") 'counsel-locate)
   (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
+  (global-set-key (kbd "C-c s") 'counsel-tramp)
   (global-set-key (kbd "C-c C-r") 'ivy-resume))
 
 (use-package counsel-tramp)
@@ -105,8 +109,8 @@
 ;; Code completion
 (use-package company
   :config (add-hook 'after-init-hook 'global-company-mode)
-  (setq company-idle-delay 0.5)
-  (setq company-tooltip-limit 10)
+  (setq company-idle-delay 0)
+  (setq company-tooltip-limit 15)
   (setq company-minimum-prefix-length 2)
   ;; invert the navigation direction if the the completion popup-isearch-match
   ;; is displayed on top (happens near the bottom of windows)
@@ -117,8 +121,11 @@
   :config (company-flx-mode +1))
 (use-package company-ansible)
 (use-package company-dict)
+(use-package company-edbi)
 (use-package company-emoji)
+(use-package company-jedi)
 (use-package company-lua)
+;(use-package company-lsp)
 (use-package company-nixos-options)
 (use-package company-quickhelp)
 (use-package company-restclient)
@@ -127,6 +134,17 @@
 (use-package company-tern)
 (use-package company-try-hard)
 (use-package company-web)
+
+;; Gtags
+(use-package ggtags
+  :config (setq ggtags-executable-directory "/usr/bin")
+  (setq ggtags-use-idutils t)
+  (setq ggtags-use-project-gtagsconf nil)
+  (setq ggtags-global-mode 1)
+  (setq ggtags-oversize-limit 104857600) ;; Allow very large database files
+  (setq ggtags-sort-by-nearness t))
+
+(use-package docker-tramp)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; END - Completion
@@ -162,6 +180,13 @@
 (use-package yaml-mode)
 
 (use-package pdf-tools)
+(pdf-tools-install)
+
+(use-package indium)
+
+(use-package exec-path-from-shell
+  :config (when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; END - Custom packages
@@ -196,6 +221,7 @@
 (setq tls-checktrust t)
 (setq gnutls-verify-error t)
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Nice keyboard shortcuts
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -205,6 +231,13 @@
 
 ;; Complete shortcut
 (global-set-key (kbd "M-/") 'hippie-expand)
+
+;; Nice buffer search
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+
+;; Regexp searches by default
+(global-set-key (kbd "C-s") 'isearch-forward-regexp)
+(global-set-key (kbd "C-r") 'isearch-backward-regexp)
 
 ;; Always display column number in status line
 (setq column-number-mode t)
@@ -262,6 +295,11 @@
 
 (setq shell-file-name "bash")
 (setq explicit-shell-file-name shell-file-name)
+
+;; Dired
+
+;; Try to guess destination path using splitted window
+(setq dired-dwim-target t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; END - Custom settings
