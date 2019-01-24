@@ -1,6 +1,10 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Begin file
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; init.el --- Custom init.el
+
+;;; Commentary:
+
+;; This is a custom init.el for Emacs daily use
+
+;;; Code:
 
 ;; Always load newest byte code
 (setq load-prefer-newer t)
@@ -48,13 +52,18 @@
   (setq auto-package-update-delete-old-versions t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; End of package management
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; BEGIN - Theme / Look'n'feel settings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Nice mode line, with nice theme
 (use-package smart-mode-line-powerline-theme
-  :config (setq sml/theme 'powerline)
-          (setq sml/no-confirm-load-theme t))
+  :config (setq sml/theme 'powerline
+                sml/no-confirm-load-theme t))
+
 (use-package smart-mode-line
   :config (sml/setup))
 
@@ -76,13 +85,19 @@
 
 ;; Everywhere completion
 (use-package counsel
-  :config (ivy-mode 1)
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-count-format "%d/%d ")
-  (setq ivy-extra-directories nil)
-  (setq ivy-use-selectable-prompt t)
-  (setq ivy-re-builders-alist
-      '((t . ivy--regex-fuzzy)))
+  :init (ivy-mode 1)
+  :config
+  (setq ivy-use-virtual-buffers t
+        ivy-height 20
+        ivy-count-format "(%d/%d) "
+        ivy-display-style 'fancy
+        ivy-format-function 'ivy-format-function-line
+        ivy-extra-directories nil
+        ivy-use-selectable-prompt t
+        ivy-re-builders-alist
+            '((ivy-switch-buffer . ivy--regex-plus)
+              (t . ivy--regex-fuzzy))
+        ivy-initial-inputs-alist nil)
   (global-set-key (kbd "C-s") 'swiper)
   (global-set-key (kbd "M-x") 'counsel-M-x)
   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
@@ -95,11 +110,21 @@
   (global-set-key (kbd "C-c j") 'counsel-git-grep)
   (global-set-key (kbd "C-c k") 'counsel-ag)
   (global-set-key (kbd "C-x l") 'counsel-locate)
-  (global-set-key (kbd "C-S-o") 'counsel-rhythmbox)
   (global-set-key (kbd "C-c s") 'counsel-tramp)
   (global-set-key (kbd "C-c C-r") 'ivy-resume))
 
 (use-package counsel-tramp)
+(use-package counsel-bbdb)
+(use-package counsel-dash)
+(use-package counsel-gtags)
+(use-package ivy-gitlab)
+(use-package ivy-todo)
+(use-package flyspell-correct-ivy)
+
+(use-package flycheck
+  :init (global-flycheck-mode)
+  :config (add-hook 'after-init-hook #'global-flycheck-mode))
+
 (use-package all-the-icons)
 (use-package all-the-icons-dired
   :config (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
@@ -109,12 +134,20 @@
 ;; Code completion
 (use-package company
   :config (add-hook 'after-init-hook 'global-company-mode)
-  (setq company-idle-delay 0)
-  (setq company-tooltip-limit 15)
-  (setq company-minimum-prefix-length 2)
+  (define-key company-active-map (kbd "RET") nil)
+  (setq company-idle-delay 0.125
+        company-minimum-prefix-length 1
+        company-require-match nil
+        company-transformers '(company-sort-by-occurrence)
+        company-dabbrev-ignore-case nil
+        company-dabbrev-downcase nil
+        company-frontends '(company-pseudo-tooltip-unless-just-one-frontend
+                            company-preview-frontend
+                            company-echo-metadata-frontend)
+        company-tooltip-limit 15
   ;; invert the navigation direction if the the completion popup-isearch-match
   ;; is displayed on top (happens near the bottom of windows)
-  (setq company-tooltip-flip-when-above t))
+        company-tooltip-flip-when-above t))
 
 ;; Additional completion packages
 (use-package company-flx
@@ -126,7 +159,7 @@
 (use-package company-jedi)
 (use-package company-lua)
 ;(use-package company-lsp)
-(use-package company-nixos-options)
+;(use-package company-nixos-options)
 (use-package company-quickhelp)
 (use-package company-restclient)
 (use-package company-shell)
@@ -137,12 +170,12 @@
 
 ;; Gtags
 (use-package ggtags
-  :config (setq ggtags-executable-directory "/usr/bin")
-  (setq ggtags-use-idutils t)
-  (setq ggtags-use-project-gtagsconf nil)
-  (setq ggtags-global-mode 1)
-  (setq ggtags-oversize-limit 104857600) ;; Allow very large database files
-  (setq ggtags-sort-by-nearness t))
+  :config (setq ggtags-executable-directory "/usr/bin"
+                ggtags-use-idutils t
+                ggtags-use-project nil
+                ggtags-global-mode 1
+                ggtags-oversize-limit 104857600 ;; Allow very large database files
+                ggtags-sort-by-nearness t))
 
 (use-package docker-tramp)
 
@@ -178,6 +211,7 @@
 (use-package dockerfile-mode)
 (use-package docker-compose-mode)
 (use-package yaml-mode)
+(use-package adoc-mode)
 
 (use-package pdf-tools)
 (pdf-tools-install)
@@ -187,6 +221,11 @@
 (use-package exec-path-from-shell
   :config (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize)))
+
+(use-package logview)
+
+(use-package esh-autosuggest
+  :hook (eshell-mode . esh-autosuggest-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; END - Custom packages
@@ -217,6 +256,10 @@
                     :width 'normal)
 ;;(set-default-font "-*-Hack-normal-normal-normal-*-12-*-*-*-m-0-iso10646-1")
 
+;; Disable toolbar
+(if window-system
+    (tool-bar-mode -1))
+
 ;; Check TLS certs
 (setq tls-checktrust t)
 (setq gnutls-verify-error t)
@@ -246,17 +289,27 @@
 ;; (global-linum-mode nil)
 
 ;; Disable startup screens
-(setq inhibit-startup-screen t)
-(setq inhibit-startup-message t)
-(setq inhibit-splash-screen t)
-(setq initial-scratch-message nil)
+(setq inhibit-startup-screen t
+      inhibit-startup-message t
+      inhibit-splash-screen t
+      initial-scratch-message nil)
 
 ;; Encoding and line endings
 (prefer-coding-system 'utf-8)
+(set-language-environment 'utf-8)
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-selection-coding-system 'utf-8)
 (setq default-buffer-file-coding-system 'utf-8-unix)
 
 ;; Show matching parenthesis
 (show-paren-mode 1)
+
+;; Delete marked text on typing
+(delete-selection-mode t)
+
+;; Soft-wrap lines
+(global-visual-line-mode t)
 
 ;; No fucking tabs for indent
 (setq-default indent-tabs-mode nil)
@@ -264,12 +317,22 @@
 ;; Indent with 4 spaces
 (setq-default tab-width 4)
 
-;; Backups goes to one directory
-(setq backup-directory-alist `(("." . "~/.emacs.d/.saves")))
 (setq backup-by-copying t)
 
+;; Save mini-buffer command history
+(savehist-mode 1)
+(setq history-length t)
+(setq history-delete-duplicates t)
+(setq savehist-save-minibuffer-history 1)
+
+;; Also save ring history
+(setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
+
+;; Set where history are saved
+(setq savehist-file (concat user-emacs-directory "savehist"))
+
 ;; Fix path for NixOS
-(setq exec-path (append exec-path '("/run/current-system/sw/bin")))
+;(setq exec-path (append exec-path '("/run/current-system/sw/bin")))
 
 ;; Fix clipboard integration
 (setq x-select-enable-clipboard t
@@ -284,6 +347,8 @@
       visible-bell t
       load-prefer-newer t
       ediff-window-setup-function 'ediff-setup-windows-plain
+      ediff-split-window-function 'split-window-horizontally
+      ediff-merge-split-window-function 'split-window-horizontally
       save-place-file (concat user-emacs-directory "places")
       backup-directory-alist `(("." . ,(concat user-emacs-directory
                                                "backups"))))
@@ -292,6 +357,9 @@
 
 ;; SSH by default for remote host access
 (setq tramp-default-method "ssh")
+(setq tramp-copy-size-limit 1240)
+;; No tramp history file on remote host 
+(setq tramp-histfile-override t)
 
 (setq shell-file-name "bash")
 (setq explicit-shell-file-name shell-file-name)
@@ -301,25 +369,14 @@
 ;; Try to guess destination path using splitted window
 (setq dired-dwim-target t)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; END - Custom settings
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("84d2f9eeb3f82d619ca4bfffe5f157282f4779732f48a5ac1484d94d5ff5b279" default)))
- '(package-selected-packages
-   (quote
-    (json-mode markdown-toc markdown-preview-mode markdown-mode+ autodisass-java-bytecode discover-my-major multi-term zenburn-theme company-web company-try-hard company-shell company-restclient company-quickhelp company-lua company-emoji company-dict company-ansible company ivy smart-mode-line-powerline-theme auto-package-update use-package)))
- '(tramp-default-method "ssh"))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+
+;; customization settings
+(setq custom-file "~/.emacs.d/custom.el")
+    (unless (file-exists-p custom-file)
+  (with-temp-buffer
+    (insert ";;; custom.el --- local customization\n")
+    (write-file custom-file t)))
+(load custom-file)
+
+;;; init-el ends here
