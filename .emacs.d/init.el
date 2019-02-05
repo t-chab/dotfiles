@@ -68,8 +68,11 @@
   :config (sml/setup))
 
 ;; Use custom theme
-(use-package zenburn-theme
-  :config (load-theme 'zenburn t))
+;; (use-package zenburn-theme
+;;  :config (load-theme 'zenburn t))
+
+(use-package purp-theme
+  :config (load-theme 'purp t))
 
 ;; No toolbar / menubar
 (tool-bar-mode -1)
@@ -204,7 +207,6 @@
 
 ;; Other useful modes
 (use-package markdown-mode+)
-(use-package markdown-preview-mode)
 (use-package markdown-toc)
 (use-package json-mode)
 (use-package nix-mode)
@@ -223,9 +225,6 @@
   (exec-path-from-shell-initialize)))
 
 (use-package logview)
-
-(use-package esh-autosuggest
-  :hook (eshell-mode . esh-autosuggest-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; END - Custom packages
@@ -325,6 +324,24 @@
 (setq history-delete-duplicates t)
 (setq savehist-save-minibuffer-history 1)
 
+;; Save recent files history
+(require 'recentf)
+
+(recentf-mode t)
+(setq recentf-max-menu-items 50)
+(setq recentf-max-saved-items 5000)
+
+;; get rid of `find-file-read-only' and replace it with something
+;; more useful.
+(global-set-key (kbd "C-x C-r") 'ido-recentf-open)
+
+(defun ido-recentf-open ()
+  "Use `ido-completing-read' to \\[find-file] a recent file"
+  (interactive)
+  (if (find-file (ido-completing-read "Find recent file: " recentf-list))
+      (message "Opening file...")
+    (message "Aborting")))
+
 ;; Also save ring history
 (setq savehist-additional-variables '(kill-ring search-ring regexp-search-ring))
 
@@ -369,7 +386,36 @@
 ;; Try to guess destination path using splitted window
 (setq dired-dwim-target t)
 
+;; Eshell
 
+;; Nice ehancements
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp/aweshell"))
+(require 'aweshell)
+(setq eshell-up-print-parent-dir t)
+
+;; Dark theme for shell
+(with-eval-after-load "esh-opt"
+  (autoload 'epe-theme-dakrone "eshell-prompt-extras")
+  (setq eshell-highlight-prompt nil
+        eshell-prompt-function 'epe-theme-dakrone))
+
+;; Use Ivy for tab completion
+;; https://emacs.stackexchange.com/a/27871
+(add-hook 'eshell-mode-hook
+  (lambda () 
+    (define-key eshell-mode-map (kbd "<tab>")
+      (lambda () (interactive) ('completion-at-point)))))
+
+;; Update PATH
+;; (add-to-list 'exec-path "/data/scripts/sh")
+
+;; Proxy environment variables for Eshell
+;; (setenv "http_proxy" "http://127.0.0.1:8118")
+;; (setenv "https_proxy" "http://127.0.0.1:8118")
+
+;; Docker environment variables for Eshell
+(setenv "DOCKER_HOST" "tcp://127.0.0.1:2375")
+(setenv "DOCKER_PROXY" "http://docker.for.win.localhost:8118")
 
 ;; customization settings
 (setq custom-file "~/.emacs.d/custom.el")
