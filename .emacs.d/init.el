@@ -162,7 +162,6 @@
 (use-package company-jedi)
 (use-package company-lua)
 ;(use-package company-lsp)
-;(use-package company-nixos-options)
 (use-package company-quickhelp)
 (use-package company-restclient)
 (use-package company-shell)
@@ -209,7 +208,6 @@
 (use-package markdown-mode+)
 (use-package markdown-toc)
 (use-package json-mode)
-(use-package nix-mode)
 (use-package dockerfile-mode)
 (use-package docker-compose-mode)
 (use-package yaml-mode)
@@ -299,7 +297,7 @@
 (set-default-coding-systems 'utf-8)
 (set-terminal-coding-system 'utf-8)
 (set-selection-coding-system 'utf-8)
-(setq default-buffer-file-coding-system 'utf-8-unix)
+(setq buffer-file-coding-system 'utf-8-unix)
 
 ;; Show matching parenthesis
 (show-paren-mode 1)
@@ -322,7 +320,7 @@
 (savehist-mode 1)
 (setq history-length t)
 (setq history-delete-duplicates t)
-(setq savehist-save-minibuffer-history 1)
+(setq savehist-save-minibuffer-history t)
 
 ;; Save recent files history
 (require 'recentf)
@@ -336,7 +334,7 @@
 (global-set-key (kbd "C-x C-r") 'ido-recentf-open)
 
 (defun ido-recentf-open ()
-  "Use `ido-completing-read' to \\[find-file] a recent file"
+  "Use `ido-completing-read' to \\[find-file] a recent file."
   (interactive)
   (if (find-file (ido-completing-read "Find recent file: " recentf-list))
       (message "Opening file...")
@@ -348,12 +346,18 @@
 ;; Set where history are saved
 (setq savehist-file (concat user-emacs-directory "savehist"))
 
-;; Fix path for NixOS
-;(setq exec-path (append exec-path '("/run/current-system/sw/bin")))
+;; NixOS only options
+(if (file-directory-p "/run/current-system/sw")
+    (add-to-list 'exec-path "/run/current-system/sw/bin")
+    (setenv "PATH" (concat (getenv "PATH") ":/run/current-system/sw/bin"))
+    (setq exec-path (append exec-path '("/run/current-system/sw/bin")))
+    (use-package company-nixos-options)
+    (use-package nix-mode)
+)
 
 ;; Fix clipboard integration
-(setq x-select-enable-clipboard t
-      x-select-enable-primary t
+(setq select-enable-clipboard t
+      select-enable-primary t
       ;; Save whatever’s in the current (system) clipboard before
       ;; replacing it with the Emacs’ text.
       ;; https://github.com/dakrone/eos/blob/master/eos.org
@@ -375,7 +379,8 @@
 ;; SSH by default for remote host access
 (setq tramp-default-method "ssh")
 (setq tramp-copy-size-limit 1240)
-;; No tramp history file on remote host 
+
+;; No tramp history file on remote host
 (setq tramp-histfile-override t)
 
 (setq shell-file-name "bash")
@@ -402,7 +407,7 @@
 ;; Use Ivy for tab completion
 ;; https://emacs.stackexchange.com/a/27871
 (add-hook 'eshell-mode-hook
-  (lambda () 
+  (lambda ()
     (define-key eshell-mode-map (kbd "<tab>")
       (lambda () (interactive) ('completion-at-point)))))
 
