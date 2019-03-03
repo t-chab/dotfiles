@@ -128,6 +128,14 @@
   :init (global-flycheck-mode)
   :config (add-hook 'after-init-hook #'global-flycheck-mode))
 
+(use-package flycheck-color-mode-line
+  :after flycheck
+  :config (add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode))
+
+(use-package flycheck-pos-tip
+  :after flycheck
+  :hook (flycheck-mode . flycheck-pos-tip-mode))
+
 (use-package all-the-icons)
 (use-package all-the-icons-dired
   :config (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
@@ -179,8 +187,6 @@
                 ggtags-oversize-limit 104857600 ;; Allow very large database files
                 ggtags-sort-by-nearness t))
 
-(use-package docker-tramp)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; END - Completion
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -213,8 +219,8 @@
 (use-package yaml-mode)
 (use-package adoc-mode)
 
-(use-package pdf-tools)
-(pdf-tools-install)
+;; (use-package pdf-tools)
+;; (pdf-tools-install)
 
 (use-package indium)
 
@@ -347,10 +353,9 @@
 (setq savehist-file (concat user-emacs-directory "savehist"))
 
 ;; NixOS only options
-(if (file-directory-p "/run/current-system/sw")
+(if (file-directory-p "/run/current-system/sw/bin")
     (add-to-list 'exec-path "/run/current-system/sw/bin")
     (setenv "PATH" (concat (getenv "PATH") ":/run/current-system/sw/bin"))
-    (setq exec-path (append exec-path '("/run/current-system/sw/bin")))
     (use-package company-nixos-options)
     (use-package nix-mode)
 )
@@ -383,8 +388,11 @@
 ;; No tramp history file on remote host
 (setq tramp-histfile-override t)
 
-(setq shell-file-name "bash")
+(setq shell-file-name "sh")
 (setq explicit-shell-file-name shell-file-name)
+
+;; Debug tramp
+(setq tramp-verbose 10)
 
 ;; Dired
 
@@ -393,16 +401,18 @@
 
 ;; Eshell
 
-;; Nice ehancements
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp/aweshell"))
-(require 'aweshell)
-(setq eshell-up-print-parent-dir t)
+;; Nice eshell ehancements
+(if (file-directory-p "~/.emacs.d/elisp/aweshell")
+  (add-to-list 'load-path (expand-file-name "~/.emacs.d/elisp/aweshell"))
+  (require 'aweshell)
+  (setq eshell-up-print-parent-dir t)
 
 ;; Dark theme for shell
-(with-eval-after-load "esh-opt"
-  (autoload 'epe-theme-dakrone "eshell-prompt-extras")
-  (setq eshell-highlight-prompt nil
-        eshell-prompt-function 'epe-theme-dakrone))
+  (with-eval-after-load "esh-opt"
+    (autoload 'epe-theme-dakrone "eshell-prompt-extras")
+    (setq eshell-highlight-prompt nil
+          eshell-prompt-function 'epe-theme-dakrone))
+)
 
 ;; Use Ivy for tab completion
 ;; https://emacs.stackexchange.com/a/27871
@@ -410,6 +420,9 @@
   (lambda ()
     (define-key eshell-mode-map (kbd "<tab>")
       (lambda () (interactive) ('completion-at-point)))))
+
+
+;; (use-package docker-tramp)
 
 ;; Update PATH
 ;; (add-to-list 'exec-path "/data/scripts/sh")
@@ -419,8 +432,8 @@
 ;; (setenv "https_proxy" "http://127.0.0.1:8118")
 
 ;; Docker environment variables for Eshell
-(setenv "DOCKER_HOST" "tcp://127.0.0.1:2375")
-(setenv "DOCKER_PROXY" "http://docker.for.win.localhost:8118")
+;;(setenv "DOCKER_HOST" "tcp://127.0.0.1:2375")
+;;(setenv "DOCKER_PROXY" "http://docker.for.win.localhost:8118")
 
 ;; customization settings
 (setq custom-file "~/.emacs.d/custom.el")
@@ -431,3 +444,4 @@
 (load custom-file)
 
 ;;; init-el ends here
+(put 'dired-find-alternate-file 'disabled nil)
