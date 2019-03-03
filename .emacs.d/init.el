@@ -392,7 +392,7 @@
 (setq explicit-shell-file-name shell-file-name)
 
 ;; Debug tramp
-(setq tramp-verbose 10)
+;; (setq tramp-verbose 10)
 
 ;; Dired
 
@@ -422,7 +422,7 @@
       (lambda () (interactive) ('completion-at-point)))))
 
 
-;; (use-package docker-tramp)
+(use-package docker-tramp)
 
 ;; Update PATH
 ;; (add-to-list 'exec-path "/data/scripts/sh")
@@ -434,6 +434,11 @@
 ;; Docker environment variables for Eshell
 ;;(setenv "DOCKER_HOST" "tcp://127.0.0.1:2375")
 ;;(setenv "DOCKER_PROXY" "http://docker.for.win.localhost:8118")
+
+;; custom tramp settings
+(let ((tramp-custom-settings "~/.emacs.d/tramp-custom.el"))
+ (when (file-exists-p tramp-custom-settings)
+   (load-file tramp-custom-settings)))
 
 ;; customization settings
 (setq custom-file "~/.emacs.d/custom.el")
