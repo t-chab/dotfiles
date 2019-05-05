@@ -48,8 +48,9 @@
 ;; Checks for package update
 (use-package auto-package-update
   :config
-  (auto-package-update-maybe)
-  (setq auto-package-update-delete-old-versions t))
+  (setq auto-package-update-delete-old-versions t
+        auto-package-update-interval 4)
+  (auto-package-update-maybe))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; End of package management
@@ -381,14 +382,16 @@
 
 ;; Tramp
 
-;; SSH by default for remote host access
-(setq tramp-default-method "ssh")
-(setq tramp-copy-size-limit 1240)
+;; All files greater than 1M should used scp method
+(setq tramp-copy-size-limit 1024)
 
 ;; No tramp history file on remote host
 (setq tramp-histfile-override t)
 
-(setq shell-file-name "sh")
+;; Use remote path when in eshell
+(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+
+(setq shell-file-name "/bin/sh")
 (setq explicit-shell-file-name shell-file-name)
 
 ;; Debug tramp
@@ -398,6 +401,12 @@
 
 ;; Try to guess destination path using splitted window
 (setq dired-dwim-target t)
+
+;; Display human readables sizes
+(setq dired-listing-switches "-alh")
+
+;; Disable warning on use of 'a' keypress in dired
+(put 'dired-find-alternate-file 'disabled nil)
 
 ;; Eshell
 
@@ -448,5 +457,5 @@
     (write-file custom-file t)))
 (load custom-file)
 
-;;; init-el ends here
-(put 'dired-find-alternate-file 'disabled nil)
+(provide 'init)
+;;; init.el ends here
