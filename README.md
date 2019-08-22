@@ -1,3 +1,3 @@
 # dotfiles
 
-Useful configurations file for various unix tools
+Moved to [Gitlab](https://gitlab.com/tchab/dotfiles)
